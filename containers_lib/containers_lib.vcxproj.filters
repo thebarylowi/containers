@@ -20,7 +20,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="function_sample.hpp">
+    <ClInclude Include="vec.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="helper_func.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

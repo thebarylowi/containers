@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="function_sample_test_suite.cpp">
+    <ClCompile Include="vector_test_suite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
