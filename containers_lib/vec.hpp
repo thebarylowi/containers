@@ -3,6 +3,8 @@
 namespace containers
 {
 
+using iterator = int*;
+
 class vec {
 public:
 	vec()
@@ -15,10 +17,7 @@ public:
 	}
 
 	void push_back(int value) {
-		if (current == capacity) {
-			resize();
-		}
-
+		resize_if_needed();
 		data[current] = value;
 		current++;
 	}
@@ -30,7 +29,7 @@ public:
 	}
 
 	void shrink_to_fit() {
-		int* temp = new int[current];
+		iterator temp = new int[current];
 		for (size_t i = 0; i < current; ++i) {
 			temp[i] = data[i];
 		}
@@ -50,15 +49,75 @@ public:
 		}
 	}
 
+	void emplace(const int position, int&& value) {
+		if (position < current) {
+			data[position] = value;
+		}
+	}
+
+	void assign(size_t count, int value) {
+		current = count;
+		for (size_t i = 0; i < current; ++i) {
+			data[i] = value;
+		}
+	}
+
+	void emplace_back(int&& value) {
+		resize_if_needed();
+		data[current] = value;
+		current += 1;
+	}
+
+	void swap(vec& other) {
+		if (current == other.length()) {
+			iterator temp = new int[current];
+			for (size_t i = 0; i < current; ++i) {
+				temp[i] = data[i];
+			}
+
+			for (size_t i = 0; i < current; ++i) {
+				data[i] = other[i];
+				other[i] = temp[i];
+			} 
+
+			delete[] temp;
+		}
+	}
+
+	void resize(size_t count) {
+		if (count > current) {
+			for (size_t i = current; i < count; ++i) {
+				data[i] = 0;
+			}
+			current = count;
+		} else {
+			current = count;
+		}
+	}
+
+	void pop_back() {
+		current -= 1;
+	}
+
 	int& operator[](const int index) { return data[index]; }
 	size_t size() { return capacity; }
 	size_t length() { return current; }
 	bool empty() { return current == 0; }
 	int at(size_t index) { return data[index]; }
+	iterator begin() { return data; }
+	iterator end() { return data + (current - 1); }
+	int& front() { return *begin(); }
+	int& back() { return *end(); }
 
 private:
+	void resize_if_needed() {
+		if (current == capacity) {
+			resize();
+		}
+	}
+
 	void resize() {
-		int* temp = new int[3 * capacity];
+		iterator temp = new int[3 * capacity];
 		for (size_t i = 0; i < capacity; ++i) {
 			temp[i] = data[i];
 		}
