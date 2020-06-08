@@ -1,135 +1,177 @@
 #pragma once
 
-namespace containers
+#include <string>
+
+namespace collections
 {
 
-using iterator = int*;
+using index = unsigned;
+template <typename T>
+using iterator = T*;
 
-class vec {
+template <typename T>
+class vec
+{
 public:
-	vec()
-		: data(new int[capacity])
-	{}
+	vec() : _data(new T[_capacity]) {}
 
-	~vec()
+	~vec() { delete[] _data; }
+
+	T& operator[](const size_t index) { return _data[index]; }
+
+	void push_back(T value)
 	{
-		delete[] data;
-	}
-
-	void push_back(int value) {
 		resize_if_needed();
-		data[current] = value;
-		current++;
+		_data[_current] = value;
+		_current++;
 	}
 
-	void clear() {
-		for (size_t i = 0; i < capacity; ++i) {
-			data[i] = 0;
+	void pop_back()
+	{
+		if (_current != 0)
+		{
+			_current -= 1;
 		}
 	}
 
-	void shrink_to_fit() {
-		iterator temp = new int[current];
-		for (size_t i = 0; i < current; ++i) {
-			temp[i] = data[i];
-		}
-		delete[] data;
-		data = temp;
-		capacity = current;
+	void emplace_back(T&& value)
+	{
+		resize_if_needed();
+		_data[_current] = value;
+		_current++;
 	}
 
-	void reverse() {
-		size_t begin = 0, end = current - 1;
-		while (begin < end) {
-			int temp = data[begin];
-			data[begin] = data[end];
-			data[end] = temp;
+	void reverse()
+	{
+		size_t begin = 0;
+		size_t end = _current - 1;
+
+		while (begin < end)
+		{
+			T temp = _data[begin];
+			_data[begin] = _data[end];
+			_data[end] = temp;
+
 			begin++;
 			end--;
 		}
 	}
 
-	void emplace(const int position, int&& value) {
-		if (position < current) {
-			data[position] = value;
+	void clear()
+	{
+		for (size_t i = 0; i < _current; ++i)
+		{
+			_data[i] = 0;
 		}
 	}
 
-	void assign(size_t count, int value) {
-		current = count;
-		for (size_t i = 0; i < current; ++i) {
-			data[i] = value;
+	void shrink_to_fit()
+	{
+		iterator<T> temp = new T[_current];
+		for (size_t i = 0; i < _current; ++i)
+		{
+			temp[i] = _data[i];
+		}
+
+		delete[] _data;
+		_data = temp;
+		_capacity = _current;
+	}
+
+	void assign(const size_t count, const T value)
+	{
+		_current = count;
+		for (size_t i = 0; i < _current; ++i)
+		{
+			_data[i] = value;
 		}
 	}
 
-	void emplace_back(int&& value) {
-		resize_if_needed();
-		data[current] = value;
-		current += 1;
+	void resize(size_t count)
+	{
+		if (count > _current)
+		{
+			for (size_t i = _current; i < count; ++i)
+			{
+				_data[i] = 0;
+			}
+		}
+		_current = count;
 	}
 
-	void swap(vec& other) {
-		if (current == other.length()) {
-			iterator temp = new int[current];
-			for (size_t i = 0; i < current; ++i) {
-				temp[i] = data[i];
+	void swap(vec& other)
+	{
+		if (_current == other._current)
+		{
+			iterator<T> temp = new T[_current];
+			for (size_t i = 0; i < _current; ++i)
+			{
+				temp[i] = _data[i];
 			}
 
-			for (size_t i = 0; i < current; ++i) {
-				data[i] = other[i];
+			for (size_t i = 0; i < _current; ++i)
+			{
+				_data[i] = other[i];
 				other[i] = temp[i];
-			} 
+			}
 
 			delete[] temp;
 		}
 	}
 
-	void resize(size_t count) {
-		if (count > current) {
-			for (size_t i = current; i < count; ++i) {
-				data[i] = 0;
-			}
-			current = count;
-		} else {
-			current = count;
-		}
-	}
-
-	void pop_back() {
-		current -= 1;
-	}
-
-	int& operator[](const int index) { return data[index]; }
-	size_t size() { return capacity; }
-	size_t length() { return current; }
-	bool empty() { return current == 0; }
-	int at(size_t index) { return data[index]; }
-	iterator begin() { return data; }
-	iterator end() { return data + (current - 1); }
-	int& front() { return *begin(); }
-	int& back() { return *end(); }
+	size_t size() { return _current; }
+	size_t capacity() { return _capacity; }
+	bool empty() { return _current == 0; }
+	T at(const index index) { return _data[index]; }
+	iterator<T> begin() { return _data; }
+	iterator<T> end() { return _data + (_current - 1); }
+	T& front() { return *begin(); }
+	T& back() { return *end(); }
 
 private:
-	void resize_if_needed() {
-		if (current == capacity) {
+	void resize_if_needed()
+	{
+		if (_current == _capacity)
+		{
 			resize();
 		}
 	}
 
-	void resize() {
-		iterator temp = new int[3 * capacity];
-		for (size_t i = 0; i < capacity; ++i) {
-			temp[i] = data[i];
+	void resize()
+	{
+		const auto new_capacity = 3 * _capacity;
+		iterator<T> temp = new T[new_capacity];
+		for (size_t i = 0; i < _capacity; ++i)
+		{
+			temp[i] = _data[i];
 		}
 
-		delete[] data;
-		data = temp;
-		capacity *= 3;
+		delete[] _data;
+		_capacity = new_capacity;
+		_data = temp;
 	}
 
-	size_t capacity = 50;
-	size_t current = 0;
-	int* data;
+	size_t _current = 0;
+	size_t _capacity = 1;
+	T* _data;
 };
+
+template<>
+void vec<char>::clear()
+{
+	for (size_t i = 0; i < _current; ++i)
+	{
+		_data[0] = ' ';
+	}
+}
+
+template<>
+void vec<std::string>::clear()
+{
+	for (size_t i = 0; i < _current; ++i)
+	{
+		_data[0] = " ";
+	}
+}
 
 }
