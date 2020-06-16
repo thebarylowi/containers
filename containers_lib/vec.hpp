@@ -151,8 +151,8 @@ private:
 		_data = temp;
 	}
 
-	size_t _current = 0;
-	size_t _capacity = 1;
+	size_t _current{ 0 };
+	size_t _capacity{ 1 };
 	T* _data;
 };
 
