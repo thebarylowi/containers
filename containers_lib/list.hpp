@@ -25,13 +25,9 @@ public:
 
 	void clear()
 	{
-		auto temp = _head;
-		while (temp != _tail and _size != 0)
-		{
-			delete[] temp;
-			temp++;
-			_size--;
-		}
+		delete[] _head;
+		_head = _tail = nullptr;
+		_size = 0;
 	}
 
 	int back()
