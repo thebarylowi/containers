@@ -8,6 +8,11 @@ jobs:
   steps:
     - uses: actions/checkout@master
       
+    - name: checkout google-test repo
+      uses: actions/checkout@master
+      with:
+       repository: https://github.com/google/googletest.git
+      
     - name: setup build env
       uses: warrenbuckley/Setup-MSBuild@v1
       
