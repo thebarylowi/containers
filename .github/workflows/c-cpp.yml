@@ -1,0 +1,17 @@
+name: C/C++ CI
+
+on: [push]
+
+jobs:
+ build: 
+  runs-on: windows-latest
+  steps:
+    - uses: actions/checkout@master
+      
+    - name: setup build env
+      uses: warrenbuckley/Setup-MSBuild@v1
+      
+    - name: build
+      working-directory: containers_lib
+      run: msbuild containers_lib.sln 
+     
