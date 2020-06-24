@@ -16,7 +16,7 @@ using namespace ::testing;
 
 struct ListTestSuite : Test
 {
-	list sut;
+	list<int> sut;
 };
 
 TEST_F(ListTestSuite, shouldcreateNewEmptyListFromExistingEmptyList)
@@ -46,14 +46,14 @@ TEST_F(ListTestSuite, shouldCreateNewNonEmptyListFromExistingListWithMoreThenOne
 
 TEST_F(ListTestSuite, shouldCompareTwoEmptyLists)
 {
-	list l_list;
+	list<int> l_list;
 	ASSERT_EQ(sut, l_list);
 }
 
 TEST_F(ListTestSuite, shouldCompareTwoNonEmptyLists)
 {
 	sut.push_back(PROPER_VALUE);
-	list l_list;
+	list<int> l_list;
 	l_list.push_back(PROPER_VALUE);
 
 	ASSERT_EQ(sut, l_list);

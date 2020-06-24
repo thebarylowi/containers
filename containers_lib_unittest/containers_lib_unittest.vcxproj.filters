@@ -21,5 +21,8 @@
     <ClCompile Include="list_test_suite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="stack_test_suite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

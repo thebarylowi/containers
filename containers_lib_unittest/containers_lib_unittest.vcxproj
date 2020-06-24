@@ -156,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="list_test_suite.cpp" />
+    <ClCompile Include="stack_test_suite.cpp" />
     <ClCompile Include="vec_test_suite.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -6,19 +6,18 @@
 namespace collections
 {
 
+template <typename T>
 class list
 {
 public:
 	list() = default;
 
-	list(const list& other)
+	list(const list<T>& other)
 	{
-		const auto size = other._size;
 		auto head = other._head;
-
 		if (head)
 		{
-			for (size_t i = 0; i < size; ++i)
+			for (size_t i = 0; i < other._size; ++i)
 			{
 				push_back(head->_data);
 				head = head->_next;
@@ -26,18 +25,18 @@ public:
 		}
 	}
 
-	friend bool operator==(const list& lhs, const list& rhs)
+	friend bool operator==(const list<T>& lhs, const list<T>& rhs)
 	{
 		if (lhs._size == rhs._size)
 		{
 			auto rhead = rhs._head;
 			auto lhead = lhs._head;
 
-			while (rhead != rhs._tail and rhead->_next != nullptr)
+			while (rhead != rhs._tail and rhead->_next != nullptr and
+				   lhead != lhs._tail and lhead->_next != nullptr)
 			{
 				if (rhead->_data != lhead->_data)
 				{
-					std::cout << rhead->_data << " " << lhead->_data;
 					return false;
 				}
 				rhead = rhead->_next;
@@ -47,25 +46,24 @@ public:
 		return true;
 	}
 
-	void operator=(const list& other)
+	void operator=(const list<T>& other)
 	{
 		clear();
-		const auto size = other._size;
 		auto head = other._head;
 
 		if (head)
 		{
-			for (size_t i = 0; i < size; ++i)
+			for (size_t i = 0; i < other._size; ++i)
 			{
 				push_back(head->_data);
-				head++;
+				head = head->_next;
 			}
 		}
 	}
 
-	void push_back(int value)
+	void push_back(T value)
 	{
-		node* temp = new node(value);
+		const auto temp = new node(value);
 		if (_head == nullptr)
 		{
 			_head = _tail = temp;
@@ -85,7 +83,7 @@ public:
 		_size = 0;
 	}
 
-	std::optional<int> back()
+	std::optional<T> back()
 	{
 		if (_tail)
 		{
@@ -94,7 +92,7 @@ public:
 		return std::nullopt;
 	}
 
-	std::optional<int> front()
+	std::optional<T> front()
 	{
 		if (_head)
 		{
@@ -103,7 +101,7 @@ public:
 		return std::nullopt;
 	}
 
-	void assign(size_t count, int value)
+	void assign(size_t count, T value)
 	{
 		for (size_t i = 0; i < count; ++i)
 		{
@@ -116,7 +114,7 @@ public:
 
 	void display_list()
 	{
-		node* temp = _head;
+		auto temp = _head;
 		while (temp)
 		{
 			std::cout << temp->_data << " ";
@@ -126,18 +124,19 @@ public:
 	}
 
 private:
+	template <typename T>
 	struct node
 	{
-		node(int value)
+		node(T value)
 			: _data(value)
 		{}
 
 		node* _next{ nullptr };
-		int _data;
+		T _data;
 	};
 
-	node* _head{ nullptr };
-	node* _tail{ nullptr };
+	node<T>* _head{ nullptr };
+	node<T>* _tail{ nullptr };
 	size_t _size{ 0 };
 };
 
