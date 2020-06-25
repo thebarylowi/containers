@@ -32,5 +32,8 @@
     <ClInclude Include="stack.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="queue.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
