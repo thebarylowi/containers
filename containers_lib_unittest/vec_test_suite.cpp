@@ -1,5 +1,9 @@
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 #include "vec.hpp"
+
+#include <numeric>
+#include <exception>
+
 
 namespace collections::ut
 {
@@ -28,6 +32,11 @@ struct VectorTestSuite : Test
 	vec<int> sut;
 };
 
+TEST_F(VectorTestSuite, shouldThrowExceptionWhenTryToAccessElementOutOfVector)\
+{
+	ASSERT_THROW(sut.at(0), std::out_of_range);
+}
+
 TEST_F(VectorTestSuite, shouldShrinkToFitVectorContent)
 {
 	initVector();
@@ -42,8 +51,8 @@ TEST_F(VectorTestSuite, shouldReverseVectorContent)
 	initVector();
 	sut.reverse();
 
-	ASSERT_EQ(sut.at(0), LAST_VALUE);
-	ASSERT_EQ(sut.at(2), FIRST_VALUE);
+	ASSERT_EQ(sut[0], LAST_VALUE);
+	ASSERT_EQ(sut[2], FIRST_VALUE);
 }
 
 TEST_F(VectorTestSuite, shouldEmplaceBackNewElement)
@@ -113,13 +122,13 @@ TEST_F(VectorTestSuite, shouldReturnElementCountAlreadyInVector)
 
 TEST_F(VectorTestSuite, shouldShowEmptyVector)
 {
-	ASSERT_EQ(sut.empty(), true);
+	ASSERT_TRUE(sut.empty());
 }
 
 TEST_F(VectorTestSuite, shouldShowFalseToNotEmptyVector)
 {
 	sut.push_back(VALID_VALUE);
-	ASSERT_EQ(sut.empty(), false);
+	ASSERT_FALSE(sut.empty());
 }
 
 struct VectorAtMethosTestSuite : VectorTestSuite, WithParamInterface<int>

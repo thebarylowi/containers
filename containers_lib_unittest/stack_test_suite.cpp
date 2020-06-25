@@ -1,13 +1,13 @@
 #include "gtest/gtest.h"
 #include "stack.hpp"
 
+
 namespace collections::ut
 {
 
 namespace
 {
 	constexpr size_t EMPTY_STACK_SIZE = 0;
-	constexpr bool IS_EMPTY = true;
 	constexpr int PROPER_VALUE = 10;
 	constexpr int NOT_EMPTY_STACK_SIZE = 1;
 	constexpr std::optional<int> NOT_ELEMENTS_AVAIALABLE = std::nullopt;
@@ -18,9 +18,15 @@ using namespace ::testing;
 
 struct StackTestSuite : Test
 {
-	void initSut()
+	void initStack(stack<int>& container)
 	{
-		sut.push(PROPER_VALUE);
+		container.push(PROPER_VALUE);
+	}
+
+	void initStackWithTwoElements(stack<int>& container)
+	{
+		initStack(container);
+		container.push(PROPER_VALUE + 1);
 	}
 
 	stack<int> sut;
@@ -28,11 +34,9 @@ struct StackTestSuite : Test
 
 TEST_F(StackTestSuite, shouldAssingNotEmptyStringToOtherNotEmptyStack)
 {
-	initSut();
+	initStack(sut);
 	stack<int> l_stack;
-	l_stack.push(PROPER_VALUE + 1);
-	l_stack.push(PROPER_VALUE + 2);
-
+	initStackWithTwoElements(l_stack);
 	l_stack = sut;
 
 	ASSERT_EQ(sut.top(), l_stack.top());
@@ -40,22 +44,24 @@ TEST_F(StackTestSuite, shouldAssingNotEmptyStringToOtherNotEmptyStack)
 
 TEST_F(StackTestSuite, shouldAssignEmptyStackToNotEmptyOne)
 {
-	initSut();
+	initStack(sut);
 	stack<int> l_stack = sut;
+
 	ASSERT_EQ(*sut.top(), *l_stack.top());
 }
 
 TEST_F(StackTestSuite, shouldAssignNotEmptyStackToEmptyOne)
 {
 	stack<int> l_stack;
-	l_stack.push(PROPER_VALUE);
+	initStack(l_stack);
 	sut = l_stack;
+
 	ASSERT_EQ(sut.top(), l_stack.top());
 }
 
 TEST_F(StackTestSuite, shouldReturnElementOnTop)
 {
-	initSut();
+	initStack(sut);
 	ASSERT_EQ(sut.top(), PROPER_VALUE);
 }
 
@@ -66,8 +72,7 @@ TEST_F(StackTestSuite, shouldreturnNulloptWhenStackIsEmpty)
 
 TEST_F(StackTestSuite, shouldSwapNotEmptyStack)
 {
-	initSut();
-	sut.push(PROPER_VALUE + 1);
+	initStackWithTwoElements(sut);
 	ASSERT_EQ(sut.top(), PROPER_VALUE + 1);
 	sut.swap();
 	ASSERT_EQ(sut.top(), PROPER_VALUE);
@@ -78,7 +83,7 @@ TEST_F(StackTestSuite, shouldSwapNotEmptyStack)
 TEST_F(StackTestSuite, shouldNotSwapEmptyStack)
 {
 	sut.swap();
-	ASSERT_EQ(sut.empty(), IS_EMPTY);
+	ASSERT_TRUE(sut.empty());
 	ASSERT_EQ(sut.size(), EMPTY_STACK_SIZE);
 	ASSERT_EQ(sut.top(), NOT_ELEMENTS_AVAIALABLE);
 }
@@ -86,35 +91,35 @@ TEST_F(StackTestSuite, shouldNotSwapEmptyStack)
 TEST_F(StackTestSuite, shouldNotRemoveElementFromEmptyStack)
 {
 	sut.pop();
-	EXPECT_EQ(sut.empty(), IS_EMPTY);
+	EXPECT_TRUE(sut.empty());
 	ASSERT_EQ(sut.size(), EMPTY_STACK_SIZE);
 }
 
 TEST_F(StackTestSuite, shouldRemoveElementOnTop)
 {
-	initSut();
+	initStack(sut);
 	sut.pop();
 	ASSERT_EQ(sut.size(), NOT_EMPTY_STACK_SIZE - 1);
 }
 
 TEST_F(StackTestSuite, shouldReturnStackSizeFromBigStack)
 {
-	initSut();
+	initStack(sut);
 	sut.push(PROPER_VALUE);
 
-	ASSERT_EQ(sut.size(), 2);
+	ASSERT_EQ(sut.size(), NOT_EMPTY_STACK_SIZE + 1);
 }
 
 TEST_F(StackTestSuite, shouldReturnStackSizeFromNotEmptyStack)
 {
-	initSut();
+	initStack(sut);
 	ASSERT_EQ(sut.size(), NOT_EMPTY_STACK_SIZE);
 }
 
 TEST_F(StackTestSuite, shouldShowNotEmptyStack)
 {
-	initSut();
-	ASSERT_EQ(sut.empty(), not IS_EMPTY);
+	initStack(sut);
+	ASSERT_FALSE(sut.empty());
 }
 
 TEST_F(StackTestSuite, shouldReturnZeroIfStackIsEmpty)
@@ -124,7 +129,7 @@ TEST_F(StackTestSuite, shouldReturnZeroIfStackIsEmpty)
 
 TEST_F(StackTestSuite, shouldShowEmptyStack)
 {
-	ASSERT_EQ(sut.empty(), IS_EMPTY);
+	ASSERT_TRUE(sut.empty());
 }
 
 }

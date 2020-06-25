@@ -1,6 +1,10 @@
 #pragma once
 
 #include <string>
+#include <utility>
+#include <exception>
+#include <stdexcept>
+
 
 namespace collections
 {
@@ -14,6 +18,21 @@ class vec
 {
 public:
 	vec() : _data(new T[_capacity]) {}
+
+	vec(std::initializer_list<T> args_list)
+	{
+		for (const auto& arg : args_list)
+		{
+			_capacity++;
+		}
+
+		_data = new T[_capacity];
+		for (const auto& arg : args_list)
+		{
+			_data[_current] = arg;
+			_current++;
+		}
+	}
 
 	~vec() { delete[] _data; }
 
@@ -119,10 +138,18 @@ public:
 		}
 	}
 
+	T& at(const index index)
+	{
+		if (_data)
+		{
+			throw std::out_of_range("empty vector!");
+		}
+		return _data[index]; 
+	}
+
 	size_t size() { return _current; }
 	size_t capacity() { return _capacity; }
 	bool empty() { return _current == 0; }
-	T at(const index index) { return _data[index]; }
 	iterator<T> begin() { return _data; }
 	iterator<T> end() { return _data + (_current - 1); }
 	T& front() { return *begin(); }

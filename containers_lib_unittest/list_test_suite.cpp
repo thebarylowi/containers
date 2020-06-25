@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "list.hpp"
 
+
 namespace collections::ut
 {
 
@@ -22,7 +23,7 @@ struct ListTestSuite : Test
 TEST_F(ListTestSuite, shouldcreateNewEmptyListFromExistingEmptyList)
 {
 	list l_list(sut);
-	EXPECT_EQ(l_list.empty(), true);
+	EXPECT_TRUE(l_list.empty());
 	ASSERT_EQ(l_list, sut);
 }
 
@@ -39,7 +40,7 @@ TEST_F(ListTestSuite, shouldCreateNewNonEmptyListFromExistingListWithMoreThenOne
 	sut.push_back(2);
 	list l_list(sut);
 
-	EXPECT_EQ(l_list.empty(), false);
+	EXPECT_FALSE(l_list.empty());
 	EXPECT_EQ(l_list.size(), 2);
 	ASSERT_EQ(l_list, sut);
 }
@@ -99,7 +100,7 @@ TEST_F(ListTestSuite, shouldClearWholeContentListContain)
 TEST_F(ListTestSuite, shouldReturnZeroWhenListIsEmpty)
 {
 	ASSERT_EQ(sut.size(), 0);
-	ASSERT_EQ(sut.empty(), true);
+	ASSERT_TRUE(sut.empty());
 }
 
 TEST_F(ListTestSuite, shouldAddNewNodeAtEndOfList)
@@ -107,7 +108,7 @@ TEST_F(ListTestSuite, shouldAddNewNodeAtEndOfList)
 	sut.push_back(PROPER_VALUE);
 	EXPECT_EQ(sut.size(), 1);
 
-	ASSERT_EQ(sut.empty(), false);
+	ASSERT_FALSE(sut.empty());
 	ASSERT_EQ(sut.back(), PROPER_VALUE);
 }
 

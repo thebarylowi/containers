@@ -3,6 +3,7 @@
 #include <optional>
 #include <functional>
 
+
 namespace collections
 {
 
@@ -111,7 +112,6 @@ public:
 	bool empty() { return _size == 0; }
 
 private:
-
 	void handleAddingNewElementWhenDataExisit(T& value)
 	{
 		const auto new_size = _size + 1;

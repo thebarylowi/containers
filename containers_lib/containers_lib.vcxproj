@@ -150,6 +150,7 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="array.hpp" />
     <ClInclude Include="helper_func.hpp" />
     <ClInclude Include="list.hpp" />
     <ClInclude Include="queue.hpp" />

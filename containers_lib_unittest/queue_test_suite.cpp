@@ -1,13 +1,13 @@
 #include "gtest/gtest.h"
 #include "queue.hpp"
 
+
 namespace collections::ut
 {
 
 namespace
 {
 	constexpr int EMPTY_QUEUE_SIZE = 0;
-	constexpr bool EMPTY_QUEUE = true;
 	constexpr int PROPER_VALUE = 100;
 	constexpr int NOT_EMPTY_QUEUE_SIZE = 1;
 	constexpr std::optional<int> NOT_VALID_VALUE = std::nullopt;
@@ -18,15 +18,15 @@ using namespace ::testing;
 
 struct QueueTestSuite : Test
 {
-	void initSut()
+	void initQueue(queue<int>& container)
 	{
-		sut.push(PROPER_VALUE);
+		container.push(PROPER_VALUE);
 	}
 
-	void initSutWithTwoElements()
+	void initQueueWithTwoElements(queue<int>& container)
 	{
-		initSut();
-		sut.push(PROPER_VALUE + 1);
+		initQueue(container);
+		container.push(PROPER_VALUE + 1);
 	}
 
 	queue<int> sut;
@@ -34,7 +34,7 @@ struct QueueTestSuite : Test
 
 TEST_F(QueueTestSuite, shouldSwapContentOfNotEmptyQueue)
 {
-	initSutWithTwoElements();
+	initQueueWithTwoElements(sut);
 	sut.push(PROPER_VALUE + 2);
 
 	sut.swap();
@@ -52,7 +52,7 @@ TEST_F(QueueTestSuite, shouldNotSwapEmptyQueue)
 
 TEST_F(QueueTestSuite, shouldRemoveFirstElementOfNotEmptyQueue)
 {
-	initSutWithTwoElements();
+	initQueueWithTwoElements(sut);
 	sut.pop();
 	ASSERT_EQ(sut.front(), PROPER_VALUE + 1);
 }
@@ -65,7 +65,7 @@ TEST_F(QueueTestSuite, shouldNotRemoveAnythingFromEmptyQueue)
 
 TEST_F(QueueTestSuite, shouldAssignNotEmptyQueueToOtherNotEmptyQueue)
 {
-	initSutWithTwoElements();
+	initQueueWithTwoElements(sut);
 	queue<int> l_queue;
 	l_queue.emplace(15);
 	l_queue.emplace(16);
@@ -76,7 +76,7 @@ TEST_F(QueueTestSuite, shouldAssignNotEmptyQueueToOtherNotEmptyQueue)
 
 TEST_F(QueueTestSuite, shouldAssignEmptyQueueToNotEmptyOne)
 {
-	initSut();
+	initQueue(sut);
 	queue<int> l_queue;
 	l_queue = sut;
 
@@ -86,8 +86,7 @@ TEST_F(QueueTestSuite, shouldAssignEmptyQueueToNotEmptyOne)
 TEST_F(QueueTestSuite, shouldAssignQueueToEmptyQueue)
 {
 	queue<int> l_queue;
-	l_queue.push(PROPER_VALUE);
-	l_queue.push(PROPER_VALUE + 1);
+	initQueueWithTwoElements(l_queue);
 	sut = l_queue;
 
 	ASSERT_EQ(sut.back(), PROPER_VALUE + 1);
@@ -102,7 +101,7 @@ TEST_F(QueueTestSuite, shouldAssignEmptyQueueToOtherEmptyQueue)
 
 TEST_F(QueueTestSuite, shouldAddNewCreatedElementIntoNotEmptyQueue)
 {
-	initSut();
+	initQueue(sut);
 	sut.emplace(101);
 	ASSERT_EQ(sut.back(), 101);
 }
@@ -115,7 +114,7 @@ TEST_F(QueueTestSuite, shouldAddNewCreatedElementIntoEmptyQueue)
 
 TEST_F(QueueTestSuite, shouldReturnFirstElemenetFromNotEmptyQueue)
 {
-	initSutWithTwoElements();
+	initQueueWithTwoElements(sut);
 	ASSERT_EQ(sut.front(), PROPER_VALUE);
 }
 
@@ -131,15 +130,15 @@ TEST_F(QueueTestSuite, shouldNotReturnLastValueFromEmptyQueue)
 
 TEST_F(QueueTestSuite, shouldReturnLastElementOfNotEmptyQueue)
 {
-	initSutWithTwoElements();
+	initQueueWithTwoElements(sut);
 	ASSERT_EQ(sut.back(), PROPER_VALUE + 1);
 }
 
 TEST_F(QueueTestSuite, shouldInsertIntoNotEmptyQueue)
 {
-	initSut();
+	initQueue(sut);
 	sut.push(PROPER_VALUE);
-	EXPECT_EQ(sut.empty(), not EMPTY_QUEUE);
+	EXPECT_FALSE(sut.empty());
 	EXPECT_EQ(sut.size(), NOT_EMPTY_QUEUE_SIZE + 1);
 
 	ASSERT_EQ(sut.back(), PROPER_VALUE);
@@ -147,8 +146,8 @@ TEST_F(QueueTestSuite, shouldInsertIntoNotEmptyQueue)
 
 TEST_F(QueueTestSuite, shouldInsertNewElementIntoEmptyQueue)
 {
-	sut.push(PROPER_VALUE);
-	EXPECT_EQ(sut.empty(), not EMPTY_QUEUE);
+	initQueue(sut);
+	EXPECT_FALSE(sut.empty());
 	EXPECT_EQ(sut.size(), NOT_EMPTY_QUEUE_SIZE);
 
 	ASSERT_EQ(sut.back(), PROPER_VALUE);
@@ -156,13 +155,13 @@ TEST_F(QueueTestSuite, shouldInsertNewElementIntoEmptyQueue)
 
 TEST_F(QueueTestSuite, shouldReturnTrueWhenQueueIsEmpty)
 {
-	ASSERT_EQ(sut.empty(), EMPTY_QUEUE);
+	ASSERT_TRUE(sut.empty());
 }
 
 TEST_F(QueueTestSuite, shouldReturnFalseWhenQueueIsEmpty)
 {
-	sut.push(PROPER_VALUE);
-	ASSERT_EQ(sut.empty(), not EMPTY_QUEUE);
+	initQueue(sut);
+	ASSERT_FALSE(sut.empty());
 }
 
 TEST_F(QueueTestSuite, shouldReturnZeroSizeFromEmptyQueue)
