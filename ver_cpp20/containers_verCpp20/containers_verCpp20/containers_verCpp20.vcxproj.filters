@@ -21,5 +21,8 @@
     <ClCompile Include="array.ixx">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="stack.ixx">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClCompile Include="array.ixx" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="stack.ixx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

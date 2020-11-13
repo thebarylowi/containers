@@ -68,7 +68,7 @@ public:
 		return _size == 0;
 	}
 
-	void print() const { 
+	void display() const { 
 		for (size_t i = 0; i < _size; ++i) {
 			std::cout << _data[i] << " ";
 		}
