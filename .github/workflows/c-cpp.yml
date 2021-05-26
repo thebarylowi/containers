@@ -2,9 +2,9 @@ name: C/C++ CI
 
 on:
   push:
-    branches: [ master,  cmake_alignmnet ]
+    branches: [ master, cmake_alignmnet ]
   pull_request:
-    branches: [ master,  cmake_alignmnet ]
+    branches: [ master, cmake_alignmnet ]
 
 jobs:
   build:
@@ -17,6 +17,19 @@ jobs:
       run: mkdir build && cd build && cmake ../src
     - name: build
       run: cmake --build build
+
+  valgrind:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: configure
+      run: mkdir build && cd build && cmake ../src
+    - name: build
+      run: cd build && make && sudo apt-get install valgrind
+    - name: run
+      run: valgrind /home/runner/work/containers/containers/build/containers_main
 
   build_ut:
       runs-on: ubuntu-latest
