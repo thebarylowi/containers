@@ -124,6 +124,8 @@ private:
 		_current++;
 	}
 
+	
+
 	T* _data = nullptr;
 	size_t _current{ 0 };
 	const size_t _size = element_count;
