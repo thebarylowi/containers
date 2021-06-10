@@ -53,7 +53,7 @@ struct ArrayTestSuit : Test
 TEST_F(ArrayTestSuit, shouldReturnLastElementWhenArrayIsFilled)
 {
     fill_array(sut);
-    ASSERT_EQ(SIZE + 1, *sut.back());
+    ASSERT_EQ(SIZE, *sut.back());
 }
 
 TEST_F(ArrayTestSuit, shouldReturnNullFromEndWhenArrayIsEmpty)

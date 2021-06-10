@@ -94,7 +94,11 @@ public:
 
     std::optional<std::reference_wrapper<T>> back() const
     {
-        return std::nullopt;
+        if (_size == 0)
+        {
+            return std::nullopt;
+        }
+        return _data[_size - 1];
     }
 
 private:
