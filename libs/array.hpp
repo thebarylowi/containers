@@ -2,6 +2,9 @@
 
 #include <cstddef>
 #include <iostream>
+#include <algorithm>
+#include <optional>
+#include <functional>
 
 namespace container
 {
@@ -10,7 +13,6 @@ template <typename T, std::size_t elements_count>
 class array
 {
 public:
-    // TODO: implement full rule of 5
     array()
     {
         _data = new T[_size];
@@ -30,19 +32,28 @@ public:
         }
     }
 
-    void operator=(const array& other)
+    array(array&& other)
+    {
+        _data = other._data;
+        _size = other._size;
+
+        other._data = nullptr;
+        _size = 0;
+    }
+
+    array& operator=(const array& other)
     {
         if (_size == other.size())
         {
-            for (std::size_t i = 0; i < _size; ++i)
-            {
-                _data[i] = other._data[i];
-            }
+            _size = other.size();
+            _data = new T[_size];
+            std::copy(other._data, other._data + _size, _data);
         }
         else
         {
             std::cerr << "not able to assing this array, size of array: " << _size << ", and other array: " << other._size << std::endl;
         }
+        return *this;
     }
 
     T& operator[](const std::size_t index)
@@ -65,9 +76,29 @@ public:
         return _data[index];
     }
 
+    bool empty() const
+    {
+        return _size == 0;
+    }
+
+    // TODO:add method that will return max capacity
+
+    std::optional<std::reference_wrapper<T>> front() const
+    {
+        if (_size == 0)
+        {
+            return std::nullopt;
+        }
+        return _data[0];
+    }
+
+    std::optional<std::reference_wrapper<T>> back() const
+    {
+        return std::nullopt;
+    }
+
 private:
     T* _data = nullptr;
-    std::size_t _current{0};
-    const std::size_t _size = elements_count;
+    std::size_t _size = elements_count;
 };
 }
