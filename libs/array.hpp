@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <optional>
 #include <functional>
+#include <limits>
+#include <initializer_list>
 
 namespace container
 {
@@ -19,6 +21,19 @@ public:
         for (std::size_t i = 0; i < _size; ++i)
         {
             _data[i] = 0;
+        }
+    }
+
+    array(std::initializer_list<T> args)
+    {
+        if (elements_count != 0)
+        {
+            _data = new T[_size];
+
+            for (const auto& arg : args)
+            {
+                insert(arg);
+            }
         }
     }
 
@@ -61,6 +76,18 @@ public:
         return _data[index];
     }
 
+    friend bool operator==(const array<T, elements_count>& lhs, const array<T, elements_count>& rhs)
+    {
+        for (size_t i = 0; i < lhs._size; ++i)
+        {
+            if (lhs.at(i) != rhs.at(i))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     ~array()
     {
         delete[] _data;
@@ -81,8 +108,6 @@ public:
         return _size == 0;
     }
 
-    // TODO:add method that will return max capacity
-
     std::optional<std::reference_wrapper<T>> front() const
     {
         if (_size == 0)
@@ -90,6 +115,11 @@ public:
             return std::nullopt;
         }
         return _data[0];
+    }
+
+    std::size_t max_size() const
+    {
+        return std::numeric_limits<std::size_t>::max();
     }
 
     std::optional<std::reference_wrapper<T>> back() const
@@ -101,8 +131,25 @@ public:
         return _data[_size - 1];
     }
 
+    T* begin() noexcept
+    {
+        return _data;
+    }
+
+    T* end() noexcept
+    {
+        return _data + _size;
+    }
+
 private:
+    void insert(const T& value)
+    {
+        _data[_current] = value;
+        _current++;
+    }
+
     T* _data = nullptr;
     std::size_t _size = elements_count;
+    std::size_t _current{0};
 };
 }

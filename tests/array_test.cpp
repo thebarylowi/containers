@@ -2,6 +2,8 @@
 #include <cstddef>
 #include <utility>
 #include <optional>
+#include <limits>
+#include <numeric>
 #include "../libs/array.hpp"
 
 namespace ut
@@ -15,14 +17,11 @@ constexpr std::size_t SIZE = 100;
 constexpr std::size_t INDEX_IN_BASIC_RANGE = SIZE / 2;
 constexpr int EXPECTED_VALUE_FROM_EMPTY = 0;
 constexpr std::size_t EMPTY_ARRAY = 0;
+constexpr std::size_t MAX_SIZE = std::numeric_limits<std::size_t>::max();
 
 void fill_array(array<int, SIZE>& arr)
 {
-    // TODO: maybe add iota usge to fill it up?
-    for (std::size_t i = 0; i < SIZE; ++i)
-    {
-        arr[i] = i + 1;
-    }
+    std::iota(arr.begin(), arr.end(), 1);
 }
 
 bool compare_two_arrays(const array<int, SIZE>& first, const array<int, SIZE>& second)
@@ -39,6 +38,16 @@ bool compare_two_arrays(const array<int, SIZE>& first, const array<int, SIZE>& s
 
 }
 
+TEST(ArrayConstruction, shouldCreateArrayFromInitList)
+{
+    array<int, 5> EXPEXTED_ARRAY_CONTENT{1, 2, 3, 4, 5};
+
+    array<int, 5> sut{1, 2, 3, 4, 5};
+
+    ASSERT_EQ(EXPEXTED_ARRAY_CONTENT, sut);
+
+}
+
 struct ArrayTestSuit : Test
 {
     void expectArraysAreEqual(const array<int, SIZE>& other)
@@ -49,6 +58,23 @@ struct ArrayTestSuit : Test
 
     array<int, SIZE> sut;
 };
+
+TEST_F(ArrayTestSuit, shouldReturnAccessToEndOfCollection)
+{
+    fill_array(sut);
+    ASSERT_EQ(*(sut.end() - 1), 100);
+}
+
+TEST_F(ArrayTestSuit, shouldReturnAccessToBegin)
+{
+    fill_array(sut);
+    ASSERT_EQ(*(sut.begin()), 1);
+}
+
+TEST_F(ArrayTestSuit, shouldReturnMaxPossibleCountOfArrayElements)
+{
+    ASSERT_EQ(MAX_SIZE, sut.max_size());
+}
 
 TEST_F(ArrayTestSuit, shouldReturnLastElementWhenArrayIsFilled)
 {
