@@ -60,6 +60,11 @@ struct ArrayTestSuit : Test
     array<int, SIZE> sut;
 };
 
+TEST_F(ArrayTestSuit, shouldThrowExceptionWhenAccesingElementsOfEmptyArray)
+{
+    ASSERT_THROW(sut.at(SIZE + 1), std::out_of_range);
+}
+
 TEST_F(ArrayTestSuit, shouldSwapTwoArrays)
 {
     fill_array(sut);

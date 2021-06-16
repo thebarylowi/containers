@@ -17,10 +17,13 @@ class array
 public:
     array()
     {
-        _data = new T[_size];
-        for (std::size_t i = 0; i < _size; ++i)
+        if (elements_count != 0)
         {
-            _data[i] = 0;
+            _data = new T[_size];
+            for (std::size_t i = 0; i < _size; ++i)
+            {
+                _data[i] = 0;
+            }
         }
     }
 
@@ -103,6 +106,16 @@ public:
 
     T& at(const std::size_t index) const
     {
+        if (not _data)
+        {
+            throw std::out_of_range("there is no data in this array!");
+        }
+
+        if (index > elements_count)
+        {
+            throw std::out_of_range("you try to access data not occupated by this array!");
+        }
+
         return _data[index];
     }
 
@@ -180,7 +193,7 @@ public:
     }
 
 private:
-    void insert(const T& value)
+    void insert(const T& value) noexcept
     {
         _data[_current] = value;
         _current++;
