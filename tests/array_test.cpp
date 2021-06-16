@@ -18,6 +18,7 @@ constexpr std::size_t INDEX_IN_BASIC_RANGE = SIZE / 2;
 constexpr int EXPECTED_VALUE_FROM_EMPTY = 0;
 constexpr std::size_t EMPTY_ARRAY = 0;
 constexpr std::size_t MAX_SIZE = std::numeric_limits<std::size_t>::max();
+constexpr int GIVEN_VALUE = 10213123;
 
 void fill_array(array<int, SIZE>& arr)
 {
@@ -58,6 +59,40 @@ struct ArrayTestSuit : Test
 
     array<int, SIZE> sut;
 };
+
+TEST_F(ArrayTestSuit, shouldSwapTwoArrays)
+{
+    fill_array(sut);
+    array<int, SIZE> filled_array;
+    filled_array.fill(GIVEN_VALUE);
+    array<int, SIZE> expected;
+    expected.fill(GIVEN_VALUE);
+
+    sut.swap(filled_array);
+
+    ASSERT_TRUE(compare_two_arrays(sut, expected));
+}
+
+TEST_F(ArrayTestSuit, shouldFillArrayWithGivenValue)
+{
+    sut.fill(GIVEN_VALUE);
+    array<int, SIZE> filled_array;
+    std::fill(filled_array.begin(), filled_array.end(), GIVEN_VALUE);
+
+    ASSERT_TRUE(compare_two_arrays(sut, filled_array));
+}
+
+TEST_F(ArrayTestSuit, shouldReturnPointerToLastElement)
+{
+    fill_array(sut);
+    ASSERT_EQ(*(sut.cend() - 1), 100);
+}
+
+TEST_F(ArrayTestSuit, shouldReturnConstBeginIterator)
+{
+    fill_array(sut);
+    ASSERT_EQ(*(sut.cbegin()), 1);
+}
 
 TEST_F(ArrayTestSuit, shouldReturnAccessToEndOfCollection)
 {

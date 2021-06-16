@@ -61,7 +61,10 @@ public:
         if (_size == other.size())
         {
             _size = other.size();
+
+            delete[] _data;
             _data = new T[_size];
+
             std::copy(other._data, other._data + _size, _data);
         }
         else
@@ -80,7 +83,7 @@ public:
     {
         for (size_t i = 0; i < lhs._size; ++i)
         {
-            if (lhs.at(i) != rhs.at(i))
+            if (lhs._data[i] != rhs._data[i])
             {
                 return false;
             }
@@ -93,7 +96,7 @@ public:
         delete[] _data;
     }
 
-    std::size_t size() const
+    std::size_t size() const noexcept
     {
         return _size;
     }
@@ -103,12 +106,12 @@ public:
         return _data[index];
     }
 
-    bool empty() const
+    bool empty() const noexcept
     {
         return _size == 0;
     }
 
-    std::optional<std::reference_wrapper<T>> front() const
+    std::optional<std::reference_wrapper<T>> front() const noexcept
     {
         if (_size == 0)
         {
@@ -117,12 +120,12 @@ public:
         return _data[0];
     }
 
-    std::size_t max_size() const
+    std::size_t max_size() const noexcept
     {
         return std::numeric_limits<std::size_t>::max();
     }
 
-    std::optional<std::reference_wrapper<T>> back() const
+    std::optional<std::reference_wrapper<T>> back() const noexcept
     {
         if (_size == 0)
         {
@@ -131,14 +134,49 @@ public:
         return _data[_size - 1];
     }
 
-    T* begin() noexcept
+    T* begin() const noexcept
     {
         return _data;
     }
 
-    T* end() noexcept
+    const T* cbegin() const noexcept
+    {
+        return _data;
+    }
+
+    T* end() const noexcept
     {
         return _data + _size;
+    }
+
+    const T* cend() const noexcept
+    {
+        return _data + _size;
+    }
+
+    void fill(const T& value) noexcept
+    {
+        for (size_t i = 0; i < _size; ++i)
+        {
+            _data[i] = value;
+        }
+    }
+
+    void swap(array& other) noexcept
+    {
+        if (_size == other.size())
+        {
+            for (size_t i = 0; i < _size; ++i)
+            {
+                auto temp = _data[i];
+                _data[i] = other[i];
+                other[i] = temp;
+            }
+        }
+        else
+        {
+            std::cerr << "two array are not the same size" << std::endl;
+        }
     }
 
 private:
