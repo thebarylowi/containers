@@ -29,7 +29,7 @@ jobs:
     - name: build
       run: cd build && make && sudo apt-get install valgrind
     - name: run
-      run: valgrind /home/runner/work/containers/containers/build/containers_main
+      run: valgrind /home/runner/work/containers/containers/build/containers
 
   build_ut:
       runs-on: ubuntu-latest
@@ -42,4 +42,4 @@ jobs:
       - name: make
         run: cd build && make
       - name: Run Test
-        run: /home/runner/work/containers/containers/build/functions_test
+        run: /home/runner/work/containers/containers/build/containers_test
