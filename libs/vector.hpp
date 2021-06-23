@@ -14,7 +14,7 @@ public:
     vector(const vector& other)
     {
         delete[] _data;
-        _data = new T[]
+        // _data = new T[]
     }
 
     void operator=(const vector& other)
