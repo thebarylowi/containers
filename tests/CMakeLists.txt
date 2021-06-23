@@ -12,6 +12,7 @@ include_directories(${GTEST_INCLUDE_DIRS})
 add_executable(containers_test
     main.cpp
     array_test.cpp
-    stack_test.cpp)
+    stack_test.cpp
+    vector_test.cpp)
 
 target_link_libraries(containers_test ${GTEST_LIBRARIES} pthread)
